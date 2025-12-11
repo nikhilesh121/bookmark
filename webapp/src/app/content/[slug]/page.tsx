@@ -6,6 +6,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { ContentActions } from "@/components/ContentActions";
 import { ContentLinks } from "@/components/ContentLinks";
 import { ReportModal } from "@/components/ReportModal";
+import { SuggestedContent } from "@/components/SuggestedContent";
 import { incrementContentView } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
 
@@ -56,13 +57,12 @@ export default async function ContentDetailPage({ params }: PageProps) {
         },
       },
       links: {
-        where: { status: "VERIFIED" },
         include: {
           partner: {
             select: { id: true, name: true, isVerified: true, logoUrl: true },
           },
         },
-        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+        orderBy: [{ status: "asc" }, { priority: "desc" }, { createdAt: "desc" }],
       },
     },
   });
@@ -72,6 +72,30 @@ export default async function ContentDetailPage({ params }: PageProps) {
   }
 
   await incrementContentView(content.id);
+
+  const categoryIds = content.categories.map((c) => c.categoryId);
+  const suggestedContent = await prisma.content.findMany({
+    where: {
+      id: { not: content.id },
+      status: "PUBLISHED",
+      OR: [
+        { type: content.type },
+        ...(categoryIds.length > 0
+          ? [{ categories: { some: { categoryId: { in: categoryIds } } } }]
+          : []),
+      ],
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      type: true,
+      imageUrl: true,
+      rating: true,
+    },
+    orderBy: { viewsTotal: "desc" },
+    take: 6,
+  });
 
   const categoryNames = content.categories
     .map((entry) => entry.category.name)
@@ -214,6 +238,12 @@ export default async function ContentDetailPage({ params }: PageProps) {
         <div className="mt-4">
           <AdSlot position="content_bottom" />
         </div>
+
+        {suggestedContent.length > 0 && (
+          <div className="mt-6">
+            <SuggestedContent items={suggestedContent} currentType={content.type} />
+          </div>
+        )}
 
         <div className="mt-4 text-center">
           <Link

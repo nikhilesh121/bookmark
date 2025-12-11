@@ -31,6 +31,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
           category: true,
         },
       },
+      links: {
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+      },
     },
   });
 
@@ -69,6 +72,9 @@ export async function PUT(request: Request, { params }: RouteParams) {
     status,
     directRedirect,
     categoryIds,
+    tags,
+    rating,
+    links,
   } = body as {
     title?: string;
     type?: "MANGA" | "ANIME" | "MOVIE";
@@ -78,6 +84,16 @@ export async function PUT(request: Request, { params }: RouteParams) {
     status?: "PUBLISHED" | "DRAFT" | "HIDDEN";
     directRedirect?: boolean;
     categoryIds?: number[];
+    tags?: string | null;
+    rating?: number | null;
+    links?: {
+      id?: number;
+      url: string;
+      sourceName: string;
+      linkType: "READ" | "WATCH" | "DOWNLOAD" | "VISIT" | "MIRROR" | "EXTERNAL";
+      status: "VERIFIED" | "UNVERIFIED" | "BLOCKED";
+      priority: number;
+    }[];
   };
 
   const existing = await prisma.content.findUnique({ where: { id } });
@@ -116,6 +132,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
         typeof directRedirect === "boolean"
           ? directRedirect
           : existing.directRedirect,
+      tags: tags !== undefined ? tags : existing.tags,
+      rating: rating !== undefined ? rating : existing.rating,
     },
   });
 
@@ -133,6 +151,23 @@ export async function PUT(request: Request, { params }: RouteParams) {
     }
   }
 
+  if (Array.isArray(links)) {
+    await prisma.contentLink.deleteMany({ where: { contentId: id } });
+
+    if (links.length > 0) {
+      await prisma.contentLink.createMany({
+        data: links.map((link) => ({
+          contentId: id,
+          url: link.url,
+          sourceName: link.sourceName,
+          linkType: link.linkType,
+          status: link.status,
+          priority: link.priority ?? 0,
+        })),
+      });
+    }
+  }
+
   const full = await prisma.content.findUnique({
     where: { id },
     include: {
@@ -140,6 +175,9 @@ export async function PUT(request: Request, { params }: RouteParams) {
         include: {
           category: true,
         },
+      },
+      links: {
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
       },
     },
   });

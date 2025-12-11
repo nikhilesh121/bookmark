@@ -19,6 +19,9 @@ export async function GET() {
           category: true,
         },
       },
+      links: {
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+      },
     },
   });
 
@@ -47,6 +50,9 @@ export async function POST(request: Request) {
     status,
     directRedirect,
     categoryIds,
+    tags,
+    rating,
+    links,
   } = body as {
     title?: string;
     type?: "MANGA" | "ANIME" | "MOVIE";
@@ -56,6 +62,16 @@ export async function POST(request: Request) {
     status?: "PUBLISHED" | "DRAFT" | "HIDDEN";
     directRedirect?: boolean;
     categoryIds?: number[];
+    tags?: string | null;
+    rating?: number | null;
+    links?: {
+      id?: number;
+      url: string;
+      sourceName: string;
+      linkType: "READ" | "WATCH" | "DOWNLOAD" | "VISIT" | "MIRROR" | "EXTERNAL";
+      status: "VERIFIED" | "UNVERIFIED" | "BLOCKED";
+      priority: number;
+    }[];
   };
 
   if (!title || !type || !imageUrl || !externalUrl) {
@@ -87,6 +103,8 @@ export async function POST(request: Request) {
       externalUrl,
       status: status ?? "PUBLISHED",
       directRedirect: directRedirect ?? false,
+      tags: tags ?? null,
+      rating: rating ?? null,
     },
   });
 
@@ -100,6 +118,19 @@ export async function POST(request: Request) {
     });
   }
 
+  if (Array.isArray(links) && links.length > 0) {
+    await prisma.contentLink.createMany({
+      data: links.map((link) => ({
+        contentId: created.id,
+        url: link.url,
+        sourceName: link.sourceName,
+        linkType: link.linkType,
+        status: link.status,
+        priority: link.priority ?? 0,
+      })),
+    });
+  }
+
   const full = await prisma.content.findUnique({
     where: { id: created.id },
     include: {
@@ -107,6 +138,9 @@ export async function POST(request: Request) {
         include: {
           category: true,
         },
+      },
+      links: {
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
       },
     },
   });

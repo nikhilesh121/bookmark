@@ -8,6 +8,15 @@ type AdminContentStatus = "PUBLISHED" | "DRAFT" | "HIDDEN";
 
 type AdminContentType = "MANGA" | "ANIME" | "MOVIE";
 
+type AdminContentLink = {
+  id: number;
+  url: string;
+  sourceName: string;
+  linkType: "READ" | "WATCH" | "DOWNLOAD" | "VISIT" | "MIRROR" | "EXTERNAL";
+  status: "VERIFIED" | "UNVERIFIED" | "BLOCKED";
+  priority: number;
+};
+
 type AdminContentItem = {
   id: number;
   title: string;
@@ -18,6 +27,8 @@ type AdminContentItem = {
   externalUrl: string;
   status: AdminContentStatus;
   directRedirect: boolean;
+  tags: string | null;
+  rating: number | null;
   createdAt: string;
   categories: {
     category: {
@@ -25,6 +36,7 @@ type AdminContentItem = {
       name: string;
     };
   }[];
+  links?: AdminContentLink[];
 };
 
 const TYPE_OPTIONS: AdminContentType[] = ["MANGA", "ANIME", "MOVIE"];
@@ -48,6 +60,13 @@ export function ContentPageClient() {
   const [status, setStatus] = useState<AdminContentStatus>("PUBLISHED");
   const [directRedirect, setDirectRedirect] = useState(false);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [tags, setTags] = useState("");
+  const [rating, setRating] = useState("");
+  const [contentLinks, setContentLinks] = useState<AdminContentLink[]>([]);
+  const [newLinkUrl, setNewLinkUrl] = useState("");
+  const [newLinkSource, setNewLinkSource] = useState("");
+  const [newLinkType, setNewLinkType] = useState<AdminContentLink["linkType"]>("READ");
+  const [newLinkStatus, setNewLinkStatus] = useState<AdminContentLink["status"]>("UNVERIFIED");
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -90,6 +109,13 @@ export function ContentPageClient() {
     setStatus("PUBLISHED");
     setDirectRedirect(false);
     setSelectedCategoryIds([]);
+    setTags("");
+    setRating("");
+    setContentLinks([]);
+    setNewLinkUrl("");
+    setNewLinkSource("");
+    setNewLinkType("READ");
+    setNewLinkStatus("UNVERIFIED");
     setEditingId(null);
   }
 
@@ -103,6 +129,33 @@ export function ContentPageClient() {
     setStatus(item.status);
     setDirectRedirect(item.directRedirect);
     setSelectedCategoryIds(item.categories.map((c) => c.category.id));
+    setTags(item.tags ?? "");
+    setRating(item.rating !== null ? String(item.rating) : "");
+    setContentLinks(item.links ?? []);
+  }
+
+  function addLink() {
+    if (!newLinkUrl || !newLinkSource) return;
+    const tempId = -Date.now();
+    setContentLinks((prev) => [
+      ...prev,
+      {
+        id: tempId,
+        url: newLinkUrl,
+        sourceName: newLinkSource,
+        linkType: newLinkType,
+        status: newLinkStatus,
+        priority: 0,
+      },
+    ]);
+    setNewLinkUrl("");
+    setNewLinkSource("");
+    setNewLinkType("READ");
+    setNewLinkStatus("UNVERIFIED");
+  }
+
+  function removeLink(linkId: number) {
+    setContentLinks((prev) => prev.filter((l) => l.id !== linkId));
   }
 
   function toggleCategory(categoryId: number) {
@@ -117,6 +170,16 @@ export function ContentPageClient() {
     event.preventDefault();
     setError(null);
 
+    let ratingNum: number | null = null;
+    if (rating && rating.trim() !== "") {
+      const parsed = parseFloat(rating);
+      if (!Number.isFinite(parsed) || parsed < 0 || parsed > 10) {
+        setError("Rating must be a number between 0 and 10");
+        return;
+      }
+      ratingNum = parsed;
+    }
+    
     const payload = {
       title,
       type,
@@ -126,6 +189,16 @@ export function ContentPageClient() {
       status,
       directRedirect,
       categoryIds: selectedCategoryIds,
+      tags: tags || null,
+      rating: ratingNum,
+      links: contentLinks.map((l) => ({
+        id: l.id > 0 ? l.id : undefined,
+        url: l.url,
+        sourceName: l.sourceName,
+        linkType: l.linkType,
+        status: l.status,
+        priority: l.priority,
+      })),
     };
 
     try {
@@ -374,6 +447,108 @@ export function ContentPageClient() {
               />
               Direct redirect (skip detail page)
             </label>
+          </div>
+
+          <div className="flex flex-col">
+            <label
+              htmlFor="tags"
+              className="mb-1 text-xs font-medium uppercase tracking-wide text-zinc-400"
+            >
+              Tags (comma-separated)
+            </label>
+            <input
+              id="tags"
+              value={tags}
+              onChange={(event) => setTags(event.target.value)}
+              placeholder="action, adventure, fantasy"
+              className="h-9 rounded-md border border-zinc-700 bg-zinc-950 px-3 text-sm text-zinc-50 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label
+              htmlFor="rating"
+              className="mb-1 text-xs font-medium uppercase tracking-wide text-zinc-400"
+            >
+              Rating (0-10)
+            </label>
+            <input
+              id="rating"
+              type="number"
+              step="0.1"
+              min="0"
+              max="10"
+              value={rating}
+              onChange={(event) => setRating(event.target.value)}
+              placeholder="9.5"
+              className="h-9 rounded-md border border-zinc-700 bg-zinc-950 px-3 text-sm text-zinc-50 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400"
+            />
+          </div>
+
+          <div className="flex flex-col md:col-span-2">
+            <span className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-400">
+              Links / Sources
+            </span>
+            
+            {contentLinks.length > 0 && (
+              <div className="mb-3 space-y-2">
+                {contentLinks.map((link) => (
+                  <div
+                    key={link.id}
+                    className="flex items-center gap-2 rounded-md border border-zinc-700 bg-zinc-950 p-2 text-xs"
+                  >
+                    <span className="flex-1 truncate text-zinc-200">{link.sourceName}</span>
+                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-zinc-400">{link.linkType}</span>
+                    <span className={`rounded px-2 py-0.5 ${
+                      link.status === "VERIFIED" ? "bg-green-900/50 text-green-300" :
+                      link.status === "BLOCKED" ? "bg-red-900/50 text-red-300" :
+                      "bg-yellow-900/50 text-yellow-300"
+                    }`}>{link.status}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeLink(link.id)}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-5">
+              <input
+                placeholder="Source name"
+                value={newLinkSource}
+                onChange={(e) => setNewLinkSource(e.target.value)}
+                className="h-8 rounded-md border border-zinc-700 bg-zinc-950 px-2 text-xs text-zinc-50 outline-none focus:border-zinc-400"
+              />
+              <input
+                placeholder="URL"
+                value={newLinkUrl}
+                onChange={(e) => setNewLinkUrl(e.target.value)}
+                className="h-8 rounded-md border border-zinc-700 bg-zinc-950 px-2 text-xs text-zinc-50 outline-none focus:border-zinc-400 sm:col-span-2"
+              />
+              <select
+                value={newLinkType}
+                onChange={(e) => setNewLinkType(e.target.value as AdminContentLink["linkType"])}
+                className="h-8 rounded-md border border-zinc-700 bg-zinc-950 px-2 text-xs text-zinc-50 outline-none focus:border-zinc-400"
+              >
+                <option value="READ">Read</option>
+                <option value="WATCH">Watch</option>
+                <option value="DOWNLOAD">Download</option>
+                <option value="VISIT">Visit</option>
+                <option value="MIRROR">Mirror</option>
+                <option value="EXTERNAL">External</option>
+              </select>
+              <button
+                type="button"
+                onClick={addLink}
+                className="h-8 rounded-md bg-zinc-700 px-3 text-xs font-medium text-zinc-50 hover:bg-zinc-600"
+              >
+                Add Link
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center gap-3 md:col-span-2">
