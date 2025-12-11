@@ -56,6 +56,8 @@ enum ContentStatus {
 
    categories     ContentCategory[]
    stats          ContentStats[]
+   favorites      Favorite[]
+   viewHistory    ViewHistory[]
 
    createdAt      DateTime          @default(now())
    updatedAt      DateTime          @updatedAt
