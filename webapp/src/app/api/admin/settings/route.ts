@@ -35,13 +35,24 @@ export async function PUT(request: Request) {
     googleAnalyticsId,
     headerAdHtml,
     footerAdHtml,
-  } = body as {
-    siteName?: string;
-    logoUrl?: string | null;
-    googleAnalyticsId?: string | null;
-    headerAdHtml?: string | null;
-    footerAdHtml?: string | null;
-  };
+    bannerTitle,
+    bannerSubtitle,
+    bannerDescription,
+    bannerBgColor,
+    bannerBgImage,
+    bannerTextColor,
+    bannerBtn1Text,
+    bannerBtn1Link,
+    bannerBtn1Color,
+    bannerBtn2Text,
+    bannerBtn2Link,
+    bannerBtn2Color,
+    headerBgColor,
+    headerTextColor,
+    footerBgColor,
+    footerTextColor,
+    footerDescription,
+  } = body as Record<string, string | null | undefined>;
 
   const current = await getOrCreateSiteSettings();
 
@@ -62,6 +73,72 @@ export async function PUT(request: Request) {
         typeof footerAdHtml === "undefined"
           ? current.footerAdHtml
           : footerAdHtml,
+      bannerTitle:
+        typeof bannerTitle === "undefined" ? current.bannerTitle : bannerTitle,
+      bannerSubtitle:
+        typeof bannerSubtitle === "undefined"
+          ? current.bannerSubtitle
+          : bannerSubtitle,
+      bannerDescription:
+        typeof bannerDescription === "undefined"
+          ? current.bannerDescription
+          : bannerDescription,
+      bannerBgColor:
+        typeof bannerBgColor === "undefined"
+          ? current.bannerBgColor
+          : bannerBgColor,
+      bannerBgImage:
+        typeof bannerBgImage === "undefined"
+          ? current.bannerBgImage
+          : bannerBgImage,
+      bannerTextColor:
+        typeof bannerTextColor === "undefined"
+          ? current.bannerTextColor
+          : bannerTextColor,
+      bannerBtn1Text:
+        typeof bannerBtn1Text === "undefined"
+          ? current.bannerBtn1Text
+          : bannerBtn1Text,
+      bannerBtn1Link:
+        typeof bannerBtn1Link === "undefined"
+          ? current.bannerBtn1Link
+          : bannerBtn1Link,
+      bannerBtn1Color:
+        typeof bannerBtn1Color === "undefined"
+          ? current.bannerBtn1Color
+          : bannerBtn1Color,
+      bannerBtn2Text:
+        typeof bannerBtn2Text === "undefined"
+          ? current.bannerBtn2Text
+          : bannerBtn2Text,
+      bannerBtn2Link:
+        typeof bannerBtn2Link === "undefined"
+          ? current.bannerBtn2Link
+          : bannerBtn2Link,
+      bannerBtn2Color:
+        typeof bannerBtn2Color === "undefined"
+          ? current.bannerBtn2Color
+          : bannerBtn2Color,
+      headerBgColor:
+        typeof headerBgColor === "undefined"
+          ? current.headerBgColor
+          : headerBgColor,
+      headerTextColor:
+        typeof headerTextColor === "undefined"
+          ? current.headerTextColor
+          : headerTextColor,
+      footerBgColor:
+        typeof footerBgColor === "undefined"
+          ? current.footerBgColor
+          : footerBgColor,
+      footerTextColor:
+        typeof footerTextColor === "undefined"
+          ? current.footerTextColor
+          : footerTextColor,
+      footerDescription:
+        typeof footerDescription === "undefined"
+          ? current.footerDescription
+          : footerDescription,
     },
   });
 

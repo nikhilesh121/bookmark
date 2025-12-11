@@ -176,6 +176,25 @@ model ViewHistory {
   headerAdHtml      String?  @db.Text
   footerAdHtml      String?  @db.Text
 
+  bannerTitle       String?
+  bannerSubtitle    String?
+  bannerDescription String?  @db.Text
+  bannerBgColor     String?
+  bannerBgImage     String?
+  bannerTextColor   String?
+  bannerBtn1Text    String?
+  bannerBtn1Link    String?
+  bannerBtn1Color   String?
+  bannerBtn2Text    String?
+  bannerBtn2Link    String?
+  bannerBtn2Color   String?
+
+  headerBgColor     String?
+  headerTextColor   String?
+  footerBgColor     String?
+  footerTextColor   String?
+  footerDescription String?  @db.Text
+
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
  }
