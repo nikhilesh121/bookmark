@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import bcrypt from "bcryptjs";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -234,6 +235,20 @@ async function main() {
   await prisma.contentCategory.deleteMany();
   await prisma.content.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.adminUser.deleteMany();
+
+  // Create admin user
+  const hashedPassword = await bcrypt.hash("admin123", 10);
+  await prisma.adminUser.create({
+    data: {
+      name: "Admin User",
+      email: "admin@example.com",
+      passwordHash: hashedPassword,
+      role: "SUPER_ADMIN",
+      status: "ACTIVE",
+    },
+  });
+  console.log("Created admin user: admin@example.com / admin123");
 
   // Create categories
   const createdCategories = await Promise.all(
