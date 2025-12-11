@@ -228,10 +228,62 @@ const movieContent = [
   },
 ];
 
+const demoAds = [
+  {
+    position: "listing_top",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/728x90/6366f1/white?text=Banner+Ad+728x90",
+    targetUrl: "https://example.com/ad1",
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    position: "listing_bottom",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/728x90/ec4899/white?text=Banner+Ad+728x90",
+    targetUrl: "https://example.com/ad2",
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    position: "content_top",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/970x250/f59e0b/white?text=Large+Banner+970x250",
+    targetUrl: "https://example.com/ad3",
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    position: "content_mid",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/300x250/10b981/white?text=Medium+Rectangle+300x250",
+    targetUrl: "https://example.com/ad4",
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    position: "content_bottom",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/728x90/8b5cf6/white?text=Footer+Ad+728x90",
+    targetUrl: "https://example.com/ad5",
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    position: "sidebar",
+    type: "IMAGE" as const,
+    imageUrl: "https://placehold.co/300x600/3b82f6/white?text=Sidebar+Ad+300x600",
+    targetUrl: "https://example.com/ad6",
+    isActive: true,
+    sortOrder: 1,
+  },
+];
+
 async function main() {
   console.log("Seeding database...");
 
   // Clear existing data
+  await prisma.ad.deleteMany();
   await prisma.contentCategory.deleteMany();
   await prisma.content.deleteMany();
   await prisma.category.deleteMany();
@@ -321,7 +373,19 @@ async function main() {
     }
   }
 
+  // Create demo ads
+  for (const ad of demoAds) {
+    await prisma.ad.create({
+      data: ad,
+    });
+  }
+  console.log("Created demo ads for ad placement preview");
+
   console.log("Seeding complete!");
+  console.log("");
+  console.log("Admin Login Credentials:");
+  console.log("  Email: admin@example.com");
+  console.log("  Password: admin123");
 }
 
 main()

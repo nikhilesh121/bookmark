@@ -111,11 +111,9 @@ export default async function AnimePage({ searchParams }: PageProps) {
 
         <div className="grid gap-2 sm:gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
           {data.items.map((item: any) => (
-            <a
+            <Link
               key={item.id}
-              href={item.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/content/${item.slug}`}
               className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
             >
               <img
@@ -125,13 +123,8 @@ export default async function AnimePage({ searchParams }: PageProps) {
               />
               <div className="content-card-info">
                 <h3 className="font-semibold text-xs sm:text-sm line-clamp-2">{item.title}</h3>
-                <span className="inline-flex items-center gap-1 text-[10px] text-white/70 mt-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 

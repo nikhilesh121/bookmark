@@ -68,11 +68,9 @@ export default async function Home() {
           </div>
           <div className="grid gap-3 grid-cols-3 sm:grid-cols-6">
             {trending.map((item: any) => (
-              <a
+              <Link
                 key={item.id}
-                href={item.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/content/${item.slug}`}
                 className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
               >
                 <img
@@ -85,13 +83,8 @@ export default async function Home() {
                     {item.type}
                   </span>
                   <h3 className="font-semibold text-xs sm:text-sm line-clamp-2">{item.title}</h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-white/70 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </span>
                 </div>
-              </a>
+              </Link>
             ))}
             {trending.length === 0 && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400 col-span-full text-center py-6">
@@ -115,11 +108,9 @@ export default async function Home() {
           </div>
           <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
             {latestManga.map((item: any) => (
-              <a
+              <Link
                 key={item.id}
-                href={item.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/content/${item.slug}`}
                 className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
               >
                 <img
@@ -129,13 +120,8 @@ export default async function Home() {
                 />
                 <div className="content-card-info">
                   <h3 className="font-semibold text-sm line-clamp-2">{item.title}</h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-white/70 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </span>
                 </div>
-              </a>
+              </Link>
             ))}
             {latestManga.length === 0 && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400 col-span-full text-center py-6">
@@ -159,11 +145,9 @@ export default async function Home() {
           </div>
           <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
             {latestAnime.map((item: any) => (
-              <a
+              <Link
                 key={item.id}
-                href={item.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/content/${item.slug}`}
                 className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
               >
                 <img
@@ -173,13 +157,8 @@ export default async function Home() {
                 />
                 <div className="content-card-info">
                   <h3 className="font-semibold text-sm line-clamp-2">{item.title}</h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-white/70 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </span>
                 </div>
-              </a>
+              </Link>
             ))}
             {latestAnime.length === 0 && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400 col-span-full text-center py-6">
@@ -203,11 +182,9 @@ export default async function Home() {
           </div>
           <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
             {latestMovies.map((item: any) => (
-              <a
+              <Link
                 key={item.id}
-                href={item.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/content/${item.slug}`}
                 className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
               >
                 <img
@@ -217,13 +194,8 @@ export default async function Home() {
                 />
                 <div className="content-card-info">
                   <h3 className="font-semibold text-sm line-clamp-2">{item.title}</h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-white/70 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </span>
                 </div>
-              </a>
+              </Link>
             ))}
             {latestMovies.length === 0 && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400 col-span-full text-center py-6">
