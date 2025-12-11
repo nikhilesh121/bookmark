@@ -60,6 +60,10 @@ webapp/
 - Bookmark content items
 - Report content issues
 - Share content (native share, copy link, social media)
+- Comment on content with reply support (nested threads)
+  - Users provide name, email, and comment
+  - Email is stored but not displayed publicly
+  - Replies can be nested up to 2 levels deep
 
 ### Admin Panel
 - Content management (CRUD)
@@ -98,8 +102,19 @@ webapp/
 - **Bookmark**: User bookmarks for content
 - **ContentReport**: User reports for content issues
 - **LinkClick**: Click tracking analytics
+- **Comment**: User comments with nested reply support
 
 ## Recent Changes
+- **Dec 2024**: Added comment system with reply functionality
+  - Users can comment on any content page
+  - Nested replies supported (up to 2 levels deep)
+  - Name and email required, email kept private
+  - Real-time comment loading and posting
+- **Dec 2024**: Added demo content and ads
+  - 6 manga entries (One Piece, Naruto, Attack on Titan, etc.)
+  - 6 anime entries (Spirited Away, Your Name, FMA Brotherhood, etc.)
+  - 6 movie entries (Inception, The Dark Knight, Interstellar, etc.)
+  - Demo ads in various positions (banners, sidebars, content areas)
 - **Dec 2024**: Enhanced admin settings with full customization
   - Header/footer color and ad customization
   - Hero banner customization (title, subtitle, description, colors, buttons)
@@ -118,7 +133,7 @@ webapp/
   - Updated admin panel with dashboard statistics
 
 ## Admin Credentials (Demo)
-- **Email**: admin@bookmark.com
+- **Email**: admin@example.com
 - **Password**: admin123
 - **Access**: Admin panel only accessible via /admin URL
 
