@@ -57,8 +57,9 @@ webapp/
 - Synced database schema with prisma db push
 
 ## Admin Credentials (Demo)
-- **Email**: admin@example.com
+- **Email**: admin@bookmark.com
 - **Password**: admin123
+- **Access**: Admin panel only accessible via /admin URL (no visible button in public header)
 
 ## Design System
 - **Primary Colors**: Indigo-purple gradient theme
