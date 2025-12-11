@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getOrCreateSiteSettings } from "@/lib/settings";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,65 +30,50 @@ export default async function RootLayout({
   const gaId = settings.googleAnalyticsId ?? undefined;
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#fafafa] text-zinc-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
       >
         <div className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 glass-effect border-b border-zinc-200/50">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-8">
+          <header className="sticky top-0 z-50 glass-effect border-b border-zinc-200/50 dark:border-zinc-700/50">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-3 sm:px-4">
+              <div className="flex items-center gap-4 sm:gap-6">
                 <Link href="/" className="flex items-center gap-2">
                   {settings.logoUrl ? (
                     <img
                       src={settings.logoUrl}
                       alt={settings.siteName}
-                      className="h-10 w-auto"
+                      className="h-8 w-auto"
                     />
                   ) : (
-                    <span className="text-2xl font-bold gradient-text">{settings.siteName}</span>
+                    <span className="text-xl font-bold gradient-text">{settings.siteName}</span>
                   )}
                 </Link>
-                <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-600 md:flex">
-                  <Link href="/manga" className="transition-colors hover:text-zinc-900 hover:underline underline-offset-4">
+                <nav className="hidden items-center gap-4 text-sm font-medium text-zinc-600 dark:text-zinc-400 sm:flex">
+                  <Link href="/manga" className="transition-colors hover:text-zinc-900 dark:hover:text-white">
                     Manga
                   </Link>
-                  <Link href="/anime" className="transition-colors hover:text-zinc-900 hover:underline underline-offset-4">
+                  <Link href="/anime" className="transition-colors hover:text-zinc-900 dark:hover:text-white">
                     Anime
                   </Link>
-                  <Link href="/movies" className="transition-colors hover:text-zinc-900 hover:underline underline-offset-4">
+                  <Link href="/movies" className="transition-colors hover:text-zinc-900 dark:hover:text-white">
                     Movies
                   </Link>
                 </nav>
               </div>
-              <div className="flex items-center gap-4">
-                <Link 
-                  href="/admin" 
-                  className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Admin
-                </Link>
-                <button className="md:hidden p-2 text-zinc-600 hover:text-zinc-900">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
               </div>
             </div>
-            <nav className="flex md:hidden items-center justify-center gap-6 py-3 border-t border-zinc-100 text-sm font-medium text-zinc-600">
-              <Link href="/manga" className="hover:text-zinc-900">Manga</Link>
-              <Link href="/anime" className="hover:text-zinc-900">Anime</Link>
-              <Link href="/movies" className="hover:text-zinc-900">Movies</Link>
-              <Link href="/admin" className="hover:text-zinc-900">Admin</Link>
+            <nav className="flex sm:hidden items-center justify-center gap-6 py-2 border-t border-zinc-100 dark:border-zinc-700/50 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+              <Link href="/manga" className="hover:text-zinc-900 dark:hover:text-white">Manga</Link>
+              <Link href="/anime" className="hover:text-zinc-900 dark:hover:text-white">Anime</Link>
+              <Link href="/movies" className="hover:text-zinc-900 dark:hover:text-white">Movies</Link>
             </nav>
             {settings.headerAdHtml && (
-              <div className="border-t border-zinc-200 bg-zinc-50">
+              <div className="border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
                 <div
-                  className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8"
+                  className="mx-auto max-w-7xl px-3 py-2 sm:px-4"
                   dangerouslySetInnerHTML={{ __html: settings.headerAdHtml }}
                 />
               </div>
@@ -96,42 +82,37 @@ export default async function RootLayout({
           <main className="flex-1">
             {children}
           </main>
-          <footer className="mt-12 border-t border-zinc-200 bg-white">
+          <footer className="mt-8 border-t border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900">
             {settings.footerAdHtml && (
-              <div className="border-b border-zinc-200 bg-zinc-50">
+              <div className="border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
                 <div
-                  className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8"
+                  className="mx-auto max-w-7xl px-3 py-3 sm:px-4"
                   dangerouslySetInnerHTML={{ __html: settings.footerAdHtml }}
                 />
               </div>
             )}
-            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-                <div className="md:col-span-2">
-                  <span className="text-xl font-bold gradient-text">{settings.siteName}</span>
-                  <p className="mt-3 text-sm text-zinc-500 max-w-md">
-                    Your ultimate destination for discovering the best manga, anime, and movies. 
-                    Browse curated collections and find your next favorite title.
+            <div className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+                <div className="col-span-2">
+                  <span className="text-lg font-bold gradient-text">{settings.siteName}</span>
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 max-w-md">
+                    Your ultimate destination for discovering the best manga, anime, and movies.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900 mb-3">Browse</h4>
-                  <ul className="space-y-2 text-sm text-zinc-500">
-                    <li><Link href="/manga" className="hover:text-zinc-900 transition-colors">Manga</Link></li>
-                    <li><Link href="/anime" className="hover:text-zinc-900 transition-colors">Anime</Link></li>
-                    <li><Link href="/movies" className="hover:text-zinc-900 transition-colors">Movies</Link></li>
+                  <h4 className="font-semibold text-zinc-900 dark:text-white text-sm mb-2">Browse</h4>
+                  <ul className="space-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+                    <li><Link href="/manga" className="hover:text-zinc-900 dark:hover:text-white transition-colors">Manga</Link></li>
+                    <li><Link href="/anime" className="hover:text-zinc-900 dark:hover:text-white transition-colors">Anime</Link></li>
+                    <li><Link href="/movies" className="hover:text-zinc-900 dark:hover:text-white transition-colors">Movies</Link></li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900 mb-3">Links</h4>
-                  <ul className="space-y-2 text-sm text-zinc-500">
-                    <li><Link href="/admin" className="hover:text-zinc-900 transition-colors">Admin Panel</Link></li>
+                  <h4 className="font-semibold text-zinc-900 dark:text-white text-sm mb-2">Info</h4>
+                  <ul className="space-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+                    <li><span>&copy; {new Date().getFullYear()} {settings.siteName}</span></li>
                   </ul>
                 </div>
-              </div>
-              <div className="mt-8 pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-500">
-                <span>&copy; {new Date().getFullYear()} {settings.siteName}. All rights reserved.</span>
-                <span>Powered by <span className="font-medium gradient-text">Bookmark Directory</span></span>
               </div>
             </div>
           </footer>

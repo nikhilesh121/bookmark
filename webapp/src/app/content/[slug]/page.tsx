@@ -73,28 +73,28 @@ export default async function ContentDetailPage({ params }: PageProps) {
 
   return (
     <div className="flex w-full flex-col">
-      <section className={`bg-gradient-to-r ${gradientClass} py-8 sm:py-12`}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 mb-2">
+      <section className={`bg-gradient-to-r ${gradientClass} py-6 sm:py-8`}>
+        <div className="mx-auto max-w-7xl px-3 sm:px-4">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
             <Link 
               href={`/${content.type.toLowerCase()}`}
-              className="text-sm font-medium text-white/70 hover:text-white transition-colors"
+              className="font-medium text-white/70 hover:text-white transition-colors"
             >
               {content.type.charAt(0) + content.type.slice(1).toLowerCase()}
             </Link>
             <span className="text-white/50">/</span>
-            <span className="text-sm font-medium text-white">{content.title}</span>
+            <span className="font-medium text-white truncate">{content.title}</span>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
         <AdSlot position="content_top" />
 
-        <div className="bg-white rounded-3xl shadow-lg border border-zinc-200 overflow-hidden">
-          <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-1/3 p-6 lg:p-8">
-              <div className="overflow-hidden rounded-2xl bg-zinc-100 shadow-inner">
+        <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+          <div className="flex flex-col sm:flex-row">
+            <div className="sm:w-1/3 p-3 sm:p-4">
+              <div className="overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-700">
                 <img
                   src={content.imageUrl}
                   alt={content.title}
@@ -102,21 +102,21 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 />
               </div>
             </div>
-            <div className="lg:w-2/3 p-6 lg:p-8 flex flex-col">
+            <div className="sm:w-2/3 p-3 sm:p-4 flex flex-col">
               <div className="flex-1">
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-gradient-to-r ${gradientClass} text-white mb-4`}>
+                <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r ${gradientClass} text-white mb-2`}>
                   {content.type}
                 </span>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900 mb-4">
+                <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white mb-3">
                   {content.title}
                 </h1>
                 
                 {categoryNames.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-6">
+                  <div className="flex flex-wrap gap-1.5 mb-4">
                     {categoryNames.map((name) => (
                       <span
                         key={name}
-                        className="category-pill text-xs"
+                        className="category-pill text-[10px]"
                       >
                         {name}
                       </span>
@@ -125,24 +125,23 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 )}
 
                 {content.description && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 mb-2">Description</h3>
-                    <p className="text-zinc-700 leading-relaxed whitespace-pre-line">
+                  <div className="mb-4">
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed line-clamp-4 sm:line-clamp-none">
                       {content.description}
                     </p>
                   </div>
                 )}
 
-                <div className="flex items-center gap-6 text-sm text-zinc-500 mb-6">
-                  <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400 mb-4">
+                  <div className="flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                     <span>{content.viewsTotal.toLocaleString()} views</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                     <span>{content.clicksTotal.toLocaleString()} clicks</span>
@@ -150,36 +149,36 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-zinc-100">
+              <div className="pt-3 border-t border-zinc-100 dark:border-zinc-700">
                 <Link
                   href={content.externalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary inline-flex items-center gap-2 text-sm"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                   {content.type === "MANGA" ? "Read Now" : content.type === "ANIME" ? "Watch Now" : "Stream Now"}
                 </Link>
-                <p className="text-xs text-zinc-400 mt-3">
-                  Opens in a new tab. Links to external streaming or reading sites.
+                <p className="text-[10px] text-zinc-400 mt-2">
+                  Opens in a new tab
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4">
           <AdSlot position="content_bottom" />
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-4 text-center">
           <Link
             href={`/${content.type.toLowerCase()}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to {content.type.charAt(0) + content.type.slice(1).toLowerCase()}

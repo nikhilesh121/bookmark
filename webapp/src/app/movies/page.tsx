@@ -39,96 +39,76 @@ export default async function MoviesPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex w-full flex-col">
-      <section className="bg-gradient-to-r from-amber-500 to-orange-500 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <section className="bg-gradient-to-r from-amber-500 to-orange-500 py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-3 sm:px-4">
+          <div className="flex items-center gap-2 mb-1">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
             </svg>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">Movies</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">Movies</h1>
           </div>
-          <p className="text-white/80 text-lg max-w-xl">
-            Explore blockbusters and hidden gems. Find your next movie night pick!
+          <p className="text-white/80 text-sm max-w-md">
+            Explore blockbusters and hidden gems.
           </p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
         <AdSlot position="listing_top" />
 
-        <form className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-6 mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="lg:col-span-2">
-              <label htmlFor="q" className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">
-                Search
-              </label>
+        <form className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-3 sm:p-4 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            <div className="col-span-2">
               <div className="relative">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
                   id="q"
                   name="q"
                   defaultValue={q ?? ""}
-                  placeholder="Search movie titles..."
-                  className="input-elegant w-full pl-10"
+                  placeholder="Search movies..."
+                  className="input-elegant w-full pl-9 text-sm"
                 />
               </div>
             </div>
-
-            <div>
-              <label htmlFor="category" className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">
-                Category
-              </label>
-              <select
-                id="category"
-                name="category"
-                defaultValue={categorySlug ?? ""}
-                className="input-elegant w-full"
-              >
-                <option value="">All Categories</option>
-                {categories.map((cat: any) => (
-                  <option key={cat.id} value={cat.slug}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="sort" className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">
-                Sort By
-              </label>
+            <select
+              id="category"
+              name="category"
+              defaultValue={categorySlug ?? ""}
+              className="input-elegant w-full text-sm"
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat: any) => (
+                <option key={cat.id} value={cat.slug}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <div className="flex gap-2">
               <select
                 id="sort"
                 name="sort"
                 defaultValue={sort}
-                className="input-elegant w-full"
+                className="input-elegant w-full text-sm"
               >
-                <option value="new">Newest First</option>
-                <option value="az">A to Z</option>
-                <option value="views">Most Popular</option>
+                <option value="new">Newest</option>
+                <option value="az">A-Z</option>
+                <option value="views">Popular</option>
               </select>
+              <button type="submit" className="btn-primary text-sm px-3 whitespace-nowrap">
+                Go
+              </button>
             </div>
-          </div>
-          <div className="mt-4 flex justify-end">
-            <button type="submit" className="btn-primary">
-              Apply Filters
-            </button>
           </div>
         </form>
 
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-zinc-500">
-            Showing <span className="font-semibold text-zinc-700">{data.items.length}</span> of{" "}
-            <span className="font-semibold text-zinc-700">{data.total}</span> movies
-          </p>
-          <p className="text-sm text-zinc-500">
-            Page {data.page} of {totalPages}
-          </p>
+        <div className="flex items-center justify-between mb-3 text-xs text-zinc-500 dark:text-zinc-400">
+          <span>{data.items.length} of {data.total} movies</span>
+          <span>Page {data.page}/{totalPages}</span>
         </div>
 
-        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="grid gap-2 sm:gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
           {data.items.map((item: any) => {
             const href = item.directRedirect
               ? `/go/${item.slug}`
@@ -137,7 +117,7 @@ export default async function MoviesPage({ searchParams }: PageProps) {
               <a
                 key={item.id}
                 href={href}
-                className="content-card card-hover group aspect-[3/4] bg-zinc-100"
+                className="content-card card-hover group aspect-[3/4] bg-zinc-200 dark:bg-zinc-800"
               >
                 <img
                   src={item.imageUrl}
@@ -145,13 +125,7 @@ export default async function MoviesPage({ searchParams }: PageProps) {
                   className="h-full w-full object-cover"
                 />
                 <div className="content-card-info">
-                  <h3 className="font-semibold text-sm line-clamp-2">{item.title}</h3>
-                  <p className="text-xs text-white/70 mt-1 line-clamp-1">
-                    {item.categories
-                      .map((c: any) => c.category.name)
-                      .filter(Boolean)
-                      .join(", ") || "Uncategorized"}
-                  </p>
+                  <h3 className="font-semibold text-xs sm:text-sm line-clamp-2">{item.title}</h3>
                 </div>
               </a>
             );
@@ -159,50 +133,31 @@ export default async function MoviesPage({ searchParams }: PageProps) {
         </div>
 
         {data.items.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-2xl border border-zinc-200">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-zinc-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-            </svg>
-            <h3 className="text-lg font-semibold text-zinc-700 mb-2">No movies found</h3>
-            <p className="text-zinc-500">Try adjusting your search or filters</p>
+          <div className="text-center py-10 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1">No movies found</h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Try adjusting your search</p>
           </div>
         )}
 
-        {data.items.length > 0 && (
-          <div className="mt-8 flex items-center justify-center gap-2">
+        {data.items.length > 0 && totalPages > 1 && (
+          <div className="mt-4 flex items-center justify-center gap-2">
             {data.page > 1 && (
               <Link
-                href={{
-                  query: {
-                    ...params,
-                    page: String(data.page - 1),
-                  },
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-zinc-200 bg-white font-medium text-sm hover:border-orange-300 hover:text-orange-600 transition-colors"
+                href={{ query: { ...params, page: String(data.page - 1) } }}
+                className="px-3 py-1.5 rounded-full border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-xs font-medium hover:border-orange-400 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Previous
+                Prev
               </Link>
             )}
-            <span className="px-4 py-2 text-sm text-zinc-500">
-              {data.page} / {totalPages}
+            <span className="px-3 py-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+              {data.page}/{totalPages}
             </span>
             {data.page < totalPages && (
               <Link
-                href={{
-                  query: {
-                    ...params,
-                    page: String(data.page + 1),
-                  },
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-zinc-200 bg-white font-medium text-sm hover:border-orange-300 hover:text-orange-600 transition-colors"
+                href={{ query: { ...params, page: String(data.page + 1) } }}
+                className="px-3 py-1.5 rounded-full border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-xs font-medium hover:border-orange-400 transition-colors"
               >
                 Next
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
               </Link>
             )}
           </div>
