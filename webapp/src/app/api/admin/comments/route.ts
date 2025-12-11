@@ -78,7 +78,11 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { ids, status } = body as { ids: number[]; status: "APPROVED" | "REJECTED" };
+    const { ids, status, body: commentBody } = body as { 
+      ids: number[]; 
+      status?: "PENDING" | "APPROVED" | "REJECTED";
+      body?: string;
+    };
 
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return NextResponse.json(
@@ -87,9 +91,26 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    if (!status || !["APPROVED", "REJECTED"].includes(status)) {
+    if (ids.length === 1 && commentBody !== undefined) {
+      const updateData: { status?: "PENDING" | "APPROVED" | "REJECTED"; body?: string } = {};
+      if (status && ["PENDING", "APPROVED", "REJECTED"].includes(status)) {
+        updateData.status = status;
+      }
+      if (commentBody !== undefined) {
+        updateData.body = commentBody;
+      }
+      
+      await prisma.comment.update({
+        where: { id: ids[0] },
+        data: updateData,
+      });
+      
+      return NextResponse.json({ success: true, updated: 1 });
+    }
+
+    if (!status || !["PENDING", "APPROVED", "REJECTED"].includes(status)) {
       return NextResponse.json(
-        { error: "Valid status is required" },
+        { error: "Valid status is required for bulk updates" },
         { status: 400 }
       );
     }
