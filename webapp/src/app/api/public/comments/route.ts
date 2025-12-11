@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+function removeUrls(text: string): string {
+  const urlPattern = /(?:https?:\/\/|www\.)[^\s]+|(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\/[^\s]*)?/gi;
+  return text.replace(urlPattern, '').replace(/\s+/g, ' ').trim();
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const contentSlug = searchParams.get("slug");
@@ -100,13 +105,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const cleanedBody = removeUrls(commentBody.trim());
+    
+    if (cleanedBody.length < 2) {
+      return NextResponse.json(
+        { error: "Comment must contain at least 2 characters (URLs are not allowed)" },
+        { status: 400 }
+      );
+    }
+
     const comment = await prisma.comment.create({
       data: {
         contentId: content.id,
         parentId: parentId || null,
         name: name.trim(),
         email: email.trim().toLowerCase(),
-        body: commentBody.trim(),
+        body: cleanedBody,
         status: "APPROVED",
       },
     });

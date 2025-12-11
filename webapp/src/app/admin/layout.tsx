@@ -34,6 +34,9 @@ export default function AdminLayout({
             <Link href="/admin/partners" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
               Partners
             </Link>
+            <Link href="/admin/comments" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
+              Comments
+            </Link>
             <Link href="/admin/reports" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
               Reports
             </Link>
@@ -68,6 +71,9 @@ export default function AdminLayout({
           </Link>
           <Link href="/admin/partners" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
             Partners
+          </Link>
+          <Link href="/admin/comments" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
+            Comments
           </Link>
           <Link href="/admin/reports" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
             Reports
