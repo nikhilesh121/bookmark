@@ -66,6 +66,11 @@ webapp/
 - Links management per content
 - Partner management
 - Reports review and resolution
+- **Site Settings** (tabbed interface):
+  - General: Site name, logo, Google Analytics
+  - Hero Banner: Title, subtitle, description, background color/image, button customization
+  - Header: Background color, text color, ad HTML
+  - Footer: Background color, text color, description, ad HTML
 
 ## Key Configuration
 - **Dev Server**: Runs on port 5000 with host 0.0.0.0
@@ -95,6 +100,11 @@ webapp/
 - **LinkClick**: Click tracking analytics
 
 ## Recent Changes
+- **Dec 2024**: Enhanced admin settings with full customization
+  - Header/footer color and ad customization
+  - Hero banner customization (title, subtitle, description, colors, buttons)
+  - Background color or image support for banners
+  - Tabbed settings interface for better organization
 - **Dec 2024**: Added multi-URL content system
   - Multiple verified external URLs per content
   - Partner website management
