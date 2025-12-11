@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AdSlot } from "@/components/AdSlot";
+import { CommentSection } from "@/components/CommentSection";
 import { ContentActions } from "@/components/ContentActions";
 import { ContentLinks } from "@/components/ContentLinks";
 import { ReportModal } from "@/components/ReportModal";
@@ -244,6 +245,10 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <SuggestedContent items={suggestedContent} currentType={content.type} />
           </div>
         )}
+
+        <div className="mt-6">
+          <CommentSection contentSlug={content.slug} />
+        </div>
 
         <div className="mt-4 text-center">
           <Link

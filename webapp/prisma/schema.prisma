@@ -85,6 +85,7 @@ model Content {
   links          ContentLink[]
   bookmarks      Bookmark[]
   reports        ContentReport[]
+  comments       Comment[]
 
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
@@ -305,4 +306,31 @@ model LinkClick {
   referrer    String?
   
   createdAt   DateTime @default(now())
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Comment {
+  id          Int           @id @default(autoincrement())
+  
+  content     Content       @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId   Int
+  
+  parent      Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId    Int?
+  replies     Comment[]     @relation("CommentReplies")
+  
+  name        String
+  email       String
+  body        String        @db.Text
+  status      CommentStatus @default(APPROVED)
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@index([contentId, createdAt])
 }
