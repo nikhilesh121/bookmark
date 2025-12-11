@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ContentType {
+  MANGA
+  ANIME
+  MOVIE
+}
+
+enum ContentStatus {
+   PUBLISHED
+   DRAFT
+   HIDDEN
+ }
+
+ enum CategoryScope {
+   MANGA
+   ANIME
+   MOVIE
+   UNIVERSAL
+ }
+
+ enum AdminRole {
+   SUPER_ADMIN
+   EDITOR
+ }
+
+ enum AdminStatus {
+   ACTIVE
+   DISABLED
+ }
+
+ enum AdType {
+  IMAGE
+  SCRIPT
+ }
+
+ model Content {
+   id             Int               @id @default(autoincrement())
+   title          String
+   slug           String            @unique
+   type           ContentType
+   imageUrl       String
+   description    String?           @db.Text
+   externalUrl    String
+   status         ContentStatus     @default(PUBLISHED)
+   directRedirect Boolean           @default(false)
+
+   viewsTotal     Int               @default(0)
+   clicksTotal    Int               @default(0)
+
+   categories     ContentCategory[]
+   stats          ContentStats[]
+
+   createdAt      DateTime          @default(now())
+   updatedAt      DateTime          @updatedAt
+ }
+
+ model Category {
+   id         Int               @id @default(autoincrement())
+   name       String
+   slug       String            @unique
+   typeScope  CategoryScope
+   sortOrder  Int               @default(0)
+
+   contents   ContentCategory[]
+
+   createdAt  DateTime          @default(now())
+   updatedAt  DateTime          @updatedAt
+ }
+
+ model ContentCategory {
+   id         Int      @id @default(autoincrement())
+
+   content    Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+   contentId  Int
+
+   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+   categoryId Int
+
+   @@unique([contentId, categoryId])
+ }
+
+ model AdminUser {
+   id           Int          @id @default(autoincrement())
+   name         String
+   email        String       @unique
+   passwordHash String
+   role         AdminRole    @default(EDITOR)
+   status       AdminStatus  @default(ACTIVE)
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  passwordHash String
+
+  favorites    Favorite[]
+  history      ViewHistory[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+}
+
+model ViewHistory {
+  id        Int      @id @default(autoincrement())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId Int
+
+  createdAt DateTime @default(now())
+}
+
+ model SiteSettings {
+  id                Int      @id @default(autoincrement())
+  siteName          String   @default("Bookmark")
+  logoUrl           String?
+  googleAnalyticsId String?
+
+  headerAdHtml      String?  @db.Text
+  footerAdHtml      String?  @db.Text
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+ }
+
+ model Ad {
+  id         Int      @id @default(autoincrement())
+  position   String
+  type       AdType
+  imageUrl   String?
+  scriptCode String?  @db.Text
+  targetUrl  String?
+  isActive   Boolean  @default(true)
+  startDate  DateTime?
+  endDate    DateTime?
+  sortOrder  Int      @default(0)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+ }
+
+ model ContentStats {
+  id        Int      @id @default(autoincrement())
+
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId Int
+
+  date      DateTime
+  views     Int      @default(0)
+  clicks    Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([contentId, date])
+ }
