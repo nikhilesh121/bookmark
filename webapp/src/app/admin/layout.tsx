@@ -25,8 +25,17 @@ export default function AdminLayout({
             <Link href="/admin/content" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
               Content
             </Link>
+            <Link href="/admin/links" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
+              Links
+            </Link>
             <Link href="/admin/categories" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
               Categories
+            </Link>
+            <Link href="/admin/partners" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
+              Partners
+            </Link>
+            <Link href="/admin/reports" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
+              Reports
             </Link>
             <Link href="/admin/ads" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors">
               Ads
@@ -51,8 +60,17 @@ export default function AdminLayout({
           <Link href="/admin/content" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
             Content
           </Link>
+          <Link href="/admin/links" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
+            Links
+          </Link>
           <Link href="/admin/categories" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
             Categories
+          </Link>
+          <Link href="/admin/partners" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
+            Partners
+          </Link>
+          <Link href="/admin/reports" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
+            Reports
           </Link>
           <Link href="/admin/ads" className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors whitespace-nowrap">
             Ads

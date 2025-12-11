@@ -3,20 +3,24 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AdSlot } from "@/components/AdSlot";
+import { ContentActions } from "@/components/ContentActions";
+import { ContentLinks } from "@/components/ContentLinks";
+import { ReportModal } from "@/components/ReportModal";
 import { incrementContentView } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const content = await prisma.content.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     select: {
       title: true,
       description: true,
@@ -42,13 +46,23 @@ export async function generateMetadata({
 }
 
 export default async function ContentDetailPage({ params }: PageProps) {
+  const { slug } = await params;
   const content = await prisma.content.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       categories: {
         include: {
           category: true,
         },
+      },
+      links: {
+        where: { status: "VERIFIED" },
+        include: {
+          partner: {
+            select: { id: true, name: true, isVerified: true, logoUrl: true },
+          },
+        },
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
       },
     },
   });
@@ -62,6 +76,8 @@ export default async function ContentDetailPage({ params }: PageProps) {
   const categoryNames = content.categories
     .map((entry) => entry.category.name)
     .filter(Boolean);
+
+  const tags = content.tags ? content.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
 
   const typeColors: Record<string, string> = {
     MANGA: "from-indigo-600 to-purple-600",
@@ -104,15 +120,18 @@ export default async function ContentDetailPage({ params }: PageProps) {
             </div>
             <div className="sm:w-2/3 p-3 sm:p-4 flex flex-col">
               <div className="flex-1">
-                <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r ${gradientClass} text-white mb-2`}>
-                  {content.type}
-                </span>
+                <div className="flex items-start justify-between mb-2">
+                  <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r ${gradientClass} text-white`}>
+                    {content.type}
+                  </span>
+                  <ContentActions contentId={content.id} contentSlug={content.slug} title={content.title} />
+                </div>
                 <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white mb-3">
                   {content.title}
                 </h1>
                 
                 {categoryNames.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {categoryNames.map((name) => (
                       <span
                         key={name}
@@ -124,9 +143,31 @@ export default async function ContentDetailPage({ params }: PageProps) {
                   </div>
                 )}
 
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded-full text-[10px] bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {content.rating && (
+                  <div className="flex items-center gap-1 mb-3">
+                    <span className="text-yellow-500">★</span>
+                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                      {content.rating.toFixed(1)}
+                    </span>
+                  </div>
+                )}
+
                 {content.description && (
                   <div className="mb-4">
-                    <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed line-clamp-4 sm:line-clamp-none">
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
                       {content.description}
                     </p>
                   </div>
@@ -149,21 +190,22 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
+              <AdSlot position="content_mid" />
+
               <div className="pt-3 border-t border-zinc-100 dark:border-zinc-700">
-                <Link
-                  href={content.externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary inline-flex items-center gap-2 text-sm"
-                >
+                <h3 className="text-sm font-semibold text-zinc-900 dark:text-white mb-3 flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
-                  {content.type === "MANGA" ? "Read Now" : content.type === "ANIME" ? "Watch Now" : "Stream Now"}
-                </Link>
-                <p className="text-[10px] text-zinc-400 mt-2">
-                  Opens in a new tab
-                </p>
+                  Available Sources
+                </h3>
+                
+                <ContentLinks 
+                  links={content.links} 
+                  contentSlug={content.slug} 
+                  contentType={content.type}
+                  fallbackUrl={content.externalUrl}
+                />
               </div>
             </div>
           </div>
@@ -185,6 +227,8 @@ export default async function ContentDetailPage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+
+      <ReportModal contentId={content.id} />
     </div>
   );
 }

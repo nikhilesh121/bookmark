@@ -35,33 +35,60 @@ enum ContentStatus {
    DISABLED
  }
 
- enum AdType {
+enum AdType {
   IMAGE
   SCRIPT
- }
+}
 
- model Content {
-   id             Int               @id @default(autoincrement())
-   title          String
-   slug           String            @unique
-   type           ContentType
-   imageUrl       String
-   description    String?           @db.Text
-   externalUrl    String
-   status         ContentStatus     @default(PUBLISHED)
-   directRedirect Boolean           @default(false)
+enum LinkType {
+  READ
+  WATCH
+  DOWNLOAD
+  VISIT
+  MIRROR
+  EXTERNAL
+}
 
-   viewsTotal     Int               @default(0)
-   clicksTotal    Int               @default(0)
+enum LinkStatus {
+  VERIFIED
+  UNVERIFIED
+  BLOCKED
+}
 
-   categories     ContentCategory[]
-   stats          ContentStats[]
-   favorites      Favorite[]
-   viewHistory    ViewHistory[]
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
 
-   createdAt      DateTime          @default(now())
-   updatedAt      DateTime          @updatedAt
- }
+model Content {
+  id             Int               @id @default(autoincrement())
+  title          String
+  slug           String            @unique
+  type           ContentType
+  imageUrl       String
+  description    String?           @db.Text
+  externalUrl    String
+  status         ContentStatus     @default(PUBLISHED)
+  directRedirect Boolean           @default(false)
+  tags           String?           @db.Text
+  rating         Float?
+
+  viewsTotal     Int               @default(0)
+  clicksTotal    Int               @default(0)
+
+  categories     ContentCategory[]
+  stats          ContentStats[]
+  favorites      Favorite[]
+  viewHistory    ViewHistory[]
+  links          ContentLink[]
+  bookmarks      Bookmark[]
+  reports        ContentReport[]
+
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
 
  model Category {
    id         Int               @id @default(autoincrement())
@@ -108,6 +135,7 @@ model User {
 
   favorites    Favorite[]
   history      ViewHistory[]
+  bookmarks    Bookmark[]
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -168,7 +196,7 @@ model ViewHistory {
   updatedAt  DateTime @updatedAt
  }
 
- model ContentStats {
+model ContentStats {
   id        Int      @id @default(autoincrement())
 
   content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
@@ -182,4 +210,80 @@ model ViewHistory {
   updatedAt DateTime @updatedAt
 
   @@unique([contentId, date])
- }
+}
+
+model ContentLink {
+  id          Int        @id @default(autoincrement())
+  
+  content     Content    @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId   Int
+  
+  partner     Partner?   @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  partnerId   Int?
+  
+  url         String
+  sourceName  String
+  linkType    LinkType
+  status      LinkStatus @default(UNVERIFIED)
+  priority    Int        @default(0)
+  clickCount  Int        @default(0)
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Partner {
+  id            Int           @id @default(autoincrement())
+  name          String
+  slug          String        @unique
+  websiteUrl    String
+  logoUrl       String?
+  isVerified    Boolean       @default(false)
+  priorityScore Int           @default(0)
+  description   String?       @db.Text
+  
+  links         ContentLink[]
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+}
+
+model ContentReport {
+  id          Int          @id @default(autoincrement())
+  
+  content     Content      @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId   Int
+  
+  reason      String
+  details     String?      @db.Text
+  reporterIp  String?
+  status      ReportStatus @default(PENDING)
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model LinkClick {
+  id          Int      @id @default(autoincrement())
+  linkId      Int
+  contentId   Int
+  userAgent   String?
+  ipAddress   String?
+  referrer    String?
+  
+  createdAt   DateTime @default(now())
+}

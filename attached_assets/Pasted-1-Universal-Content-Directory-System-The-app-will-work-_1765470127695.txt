@@ -1,0 +1,332 @@
+1. Universal Content Directory System
+
+The app will work as a universal directory platform where the admin can add any type of digital content.
+
+Examples:
+
+Manga
+
+Anime
+
+Movies
+
+TV Shows
+
+Web Series
+
+Downloadable Files
+
+Software Tools
+
+Websites
+
+Songs
+
+Comics
+
+E-books
+
+Tutorials
+
+Courses
+
+Applications
+
+Games
+
+✔ It must dynamically support unlimited custom categories
+
+Admin can create new categories anytime:
+
+“Manga”
+
+“Anime”
+
+“Movies”
+
+“Softwares”
+
+“Downloads”
+
+“Games”
+
+“Tools”
+
+“Tutorials”
+
+etc.
+
+Each category has:
+
+Category Name
+
+Category Slug
+
+Category Icon (optional)
+
+Category Description (optional)
+
+2. Item Detail Page With Multiple External Links
+
+When a user clicks a particular item (example: a manga), they are taken to a detail page.
+
+The detail page shows:
+
+Cover Image
+
+Title
+
+Category
+
+Description
+
+Tags
+
+Rating (optional)
+
+Views count (optional)
+
+Ads (header, mid-content, footer)
+
+Report Button
+
+List of external links
+
+3. Multiple URLs Per Item (Watch / Read / Download / Visit)
+
+Each item can have multiple external URLs, each with its own metadata.
+
+Example for a manga:
+
+🔗 Available Sources
+
+Read on “Website A” → redirect
+
+Read on “Website B” → redirect
+
+Download Chapter → redirect
+
+Download ZIP File → redirect
+
+View Offline PDF → redirect
+
+Mirror Link 1
+
+Mirror Link 2
+
+Partner Link
+
+Each URL has:
+
+URL
+
+Source Name
+
+Type:
+
+READ
+
+WATCH
+
+DOWNLOAD
+
+VISIT
+
+MIRROR
+
+EXTERNAL
+
+Status:
+
+VERIFIED
+
+UNVERIFIED
+
+BLOCKED
+
+Priority Order
+
+✔ Admin can add unlimited URLs to each item
+✔ Users can see only VERIFIED URLs
+✔ Admin can reorder sources
+4. Admin Panel – Add Item Functionality
+
+When adding a new item, admin fills:
+
+Title
+
+Category (multi-select)
+
+Image URL / Upload
+
+Description
+
+Tags
+
+Status (Published / Draft / Hidden)
+
+Unlimited external URLs with their type and label
+
+SEO fields (optional)
+
+5. Admin Panel – Manage URLs
+
+For each item, admin can:
+
+Add new external link
+
+Edit link
+
+Delete link
+
+Verify or unverify link
+
+Block unsafe links
+
+Reorder links
+
+Mark partner/priority link
+
+6. Ads Integration (Show Ads on Every Page)
+
+The system must support ads everywhere:
+
+Page Types
+
+Homepage
+
+Category listings
+
+Item detail page
+
+Redirect pages
+
+Search results
+
+Custom banners inside listing grids
+
+Popup ads (optional)
+
+Interstitial ads (optional)
+
+Ad Positions
+
+Header
+
+Footer
+
+Sidebar
+
+Between item cards (repeat every X items)
+
+Mid-description
+
+Before source links
+
+Between source links
+
+Before redirect
+
+After redirect
+
+Ads may be:
+
+Image ads
+
+HTML ads
+
+Script ads (Google AdSense, Adsterra, etc.)
+
+Partner ads
+
+Admin should have:
+
+Ad Manager
+
+Enable/disable ads
+
+Set ad position
+
+Schedule ads
+
+Upload images or paste ad scripts
+
+7. Safe Redirect System
+
+When user clicks a link:
+
+Record click in analytics
+
+Show a small redirect screen (with ads) for 1–3 seconds
+
+Redirect to external website
+
+This increases:
+
+Safety
+
+Play Store compliance
+
+Ad revenue
+
+8. User Interaction Tools
+
+Every detail page must have:
+
+❤️ Add to Favorites
+
+📌 Bookmark
+
+🏷 Tags
+
+⭐ Rating (optional)
+
+🚨 Report Link
+
+Share Button
+
+9. Admin Functions for Partner Websites
+
+Admin can add partner websites:
+
+Partner Name
+
+Website URL
+
+Logo
+
+Verified badge
+
+Priority score
+
+Partner URLs appear higher in the list.
+
+10. Future-Proof Expansion
+
+Your system must be flexible so you can add:
+
+New categories
+
+New item types
+
+New link types
+
+New ad zones
+
+New user modules
+
+All without changing app structure.
+
+🎯 Short Summary (Easy to Give Developer)
+Build a universal content directory platform.
+
+➤ Admin can create unlimited categories.
+➤ Each item (manga, anime, movie, software, etc.) has a detail page.
+➤ On the detail page, show multiple external URLs (Read/Watch/Download).
+➤ Each URL has type, status, label, and priority.
+➤ Admin can verify/unverify/block URLs.
+➤ Users only see VERIFIED URLs.
+➤ Add full ads support on all pages and in all positions.
+➤ Redirect page must record clicks and show ads.
+➤ Add favorites, bookmarks, and reporting.
+➤ The system must support future item types without redevelopment.
